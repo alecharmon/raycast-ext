@@ -33,4 +33,4 @@ The token is read fresh on each command launch, so re-authenticating with `gh` t
 
 ## Credit
 
-`extensions/github` is derived from the GitHub extension in [raycast/extensions](https://github.com/raycast/extensions), MIT licensed — see [`extensions/github/LICENSE`](extensions/github/LICENSE). `extensions/skills` is MIT licensed, and previously lived at [alecharmon/raycast-skills](https://github.com/alecharmon/raycast-skills).
+`extensions/github` is derived from the GitHub extension in [raycast/extensions](https://github.com/raycast/extensions), MIT licensed — see [`extensions/github/LICENSE`](extensions/github/LICENSE). `extensions/skills` is MIT licensed, and previously lived at [alecharmon/raycast-skills](https://github.com/alecharmon/raycast-skills) (now archived).
