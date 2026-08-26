@@ -1031,24 +1031,6 @@
   },
   "preferences": [
     {
-      "name": "useGitHubCLI",
-      "type": "checkbox",
-      "required": false,
-      "title": "GitHub CLI",
-      "label": "Use the GitHub CLI (gh) for authentication",
-      "description": "Authenticate with the token from `gh auth token` instead of a personal access token or Raycast's GitHub OAuth. Run `gh auth refresh -s notifications,project,read:org,read:user` so the token has the scopes this extension needs.",
-      "default": false
-    },
-    {
-      "name": "personalAccessToken",
-      "type": "password",
-      "required": false,
-      "title": "GitHub Token",
-      "description": "Your GitHub's personal access token. Required scopes: notifications repo project read:org read:user.",
-      "link": "https://github.com/settings/tokens",
-      "placeholder": "Enter your personal access token"
-    },
-    {
       "name": "defaultSearchTerms",
       "type": "textfield",
       "required": false,

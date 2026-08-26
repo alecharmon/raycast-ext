@@ -1,17 +1,14 @@
 import { Octokit } from "@octokit/rest";
-import { getPreferenceValues } from "@raycast/api";
 import { OAuthService } from "@raycast/utils";
 import { GraphQLClient } from "graphql-request";
 import fetch from "node-fetch";
 
 import { getSdk } from "../generated/graphql";
-import { getGitHubCLIToken } from "../helpers/gh-cli";
+import { requireGitHubCLIToken } from "../helpers/gh-cli";
 
 let github: ReturnType<typeof getSdk> | null = null;
 let octokit: Octokit | null = null;
 let authToken: string | null = null;
-
-const preferences = getPreferenceValues<Preferences>();
 
 function onAuthorize({ token, type }: { token: string; type: string }) {
   const authorization = type === "personal" ? `token ${token}` : `bearer ${token}`;
@@ -22,7 +19,8 @@ function onAuthorize({ token, type }: { token: string; type: string }) {
 }
 
 export const githubOAuthService = OAuthService.github({
-  personalAccessToken: preferences.useGitHubCLI ? getGitHubCLIToken() : preferences.personalAccessToken,
+  // Always set, so OAuthService never falls back to Raycast's GitHub OAuth flow.
+  personalAccessToken: requireGitHubCLIToken(),
   scope: "notifications repo project read:org read:user",
   onAuthorize,
 });

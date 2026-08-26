@@ -3,16 +3,29 @@ import { resolve } from "node:path";
 import { test } from "node:test";
 import { pathToFileURL } from "node:url";
 
+type GhCli = {
+  getGitHubCLIToken: () => string | undefined;
+  requireGitHubCLIToken: () => string;
+};
+
 // ponytail: dynamic import mirrors pull-request-checks.test.ts — keeps the .ts path out of tsc's view.
-async function loadGetGitHubCLIToken(): Promise<() => string | undefined> {
-  const moduleUrl = pathToFileURL(resolve("src/helpers/gh-cli.ts")).href;
-  const module = (await import(moduleUrl)) as { getGitHubCLIToken: () => string | undefined };
-  return module.getGitHubCLIToken;
+async function loadGhCli(): Promise<GhCli> {
+  return (await import(pathToFileURL(resolve("src/helpers/gh-cli.ts")).href)) as GhCli;
 }
 
-// Either gh is absent/logged out (undefined) or we got a real GitHub token.
 test("returns a GitHub token or undefined", async () => {
-  const token = (await loadGetGitHubCLIToken())();
+  const { getGitHubCLIToken } = await loadGhCli();
+  const token = getGitHubCLIToken();
 
   assert.ok(token === undefined || /^(gh[pousr]_|github_pat_)/.test(token), `unexpected token shape: ${token}`);
+});
+
+test("require throws an actionable error instead of returning nothing", async () => {
+  const { getGitHubCLIToken, requireGitHubCLIToken } = await loadGhCli();
+
+  if (getGitHubCLIToken() === undefined) {
+    assert.throws(requireGitHubCLIToken, /gh auth (login|refresh)|not installed/);
+  } else {
+    assert.equal(requireGitHubCLIToken(), getGitHubCLIToken());
+  }
 });

@@ -4,7 +4,7 @@ My Raycast extensions, kept in one place.
 
 | Extension | What it does |
 | --- | --- |
-| [**github**](extensions/github) | The official GitHub extension, with the option to authenticate using the `gh` CLI instead of a personal access token. |
+| [**github**](extensions/github) | The official GitHub extension, authenticating through the `gh` CLI only — no personal access token, no OAuth. |
 | [**skills**](extensions/skills) | An Obsidian-backed agent skill library — search skills, paste them into an agent, import them from GitHub, install them onto any machine. |
 
 ## Running one locally
@@ -17,17 +17,20 @@ npm run dev
 
 `npm run dev` installs the extension into Raycast as a development extension and rebuilds on save. Stop the process to stop hot-reloading; the extension stays installed.
 
-## github: authenticating with the GitHub CLI
+## github: authentication
 
-The upstream extension wants a personal access token, or Raycast's own GitHub OAuth. This fork adds a third option: reuse the token the `gh` CLI already holds.
+This fork authenticates **only** through the GitHub CLI. There is no personal access token preference and no Raycast OAuth fallback — the extension reuses whatever token `gh` already holds, so there is nothing to configure and no second credential to keep in sync.
 
-Tick **Use the GitHub CLI (gh) for authentication** in the extension's preferences, then make sure `gh` has the scopes the extension needs:
+Set `gh` up once:
 
 ```sh
+gh auth login
 gh auth refresh --hostname github.com -s notifications,read:project,project,read:org,read:user
 ```
 
-`gh`'s default scopes don't include `notifications` or `read:project`, so the notifications and projects commands fail until you run that.
+That second command matters: `gh`'s default scopes don't include `notifications` or `read:project`, and the extension's `getViewer` query needs `read:project` on every launch. Without it every command fails.
+
+If `gh` is missing or logged out, the extension says so with the command to run rather than falling back to another account's credentials.
 
 The token is read fresh on each command launch, so re-authenticating with `gh` takes effect immediately — no rebuild.
 
