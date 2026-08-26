@@ -109,7 +109,7 @@ export default function Command() {
                 <Action
                   title="Install for Agents"
                   icon={Icon.Download}
-                  shortcut={{ macOS: { modifiers: ["cmd"], key: "i" }, windows: { modifiers: ["ctrl"], key: "i" } }}
+                  shortcut={{ macOS: { modifiers: ["cmd"], key: "i" }, Windows: { modifiers: ["ctrl"], key: "i" } }}
                   onAction={() => install(skill)}
                 />
                 <Action.CopyToClipboard
@@ -117,7 +117,7 @@ export default function Command() {
                   icon={Icon.Terminal}
                   shortcut={{
                     macOS: { modifiers: ["cmd", "shift"], key: "i" },
-                    windows: { modifiers: ["ctrl", "shift"], key: "i" },
+                    Windows: { modifiers: ["ctrl", "shift"], key: "i" },
                   }}
                   content={installCommand(skill, agentSkillsDir)}
                   onCopy={() => used(skill)}
